@@ -1,9 +1,7 @@
-FROM python:3.11-alpine
-
+FROM ubuntu:22.04
+RUN apt-get update && apt-get install -y python3.11 python3-pip
 WORKDIR /app
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt .
+RUN python3.11 -m pip install -r requirements.txt
 COPY src/ src/
-
-EXPOSE 8080
-CMD ["python", "-m", "src.app"]
+CMD ["python3.11", "-m", "src.app"]
