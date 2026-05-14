@@ -2,3 +2,7 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .venv/
+.omc/
+
+# Defence-only — contains webhook secret, do not publish
+DEMO.md
