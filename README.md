@@ -1,6 +1,6 @@
 # cicd-predictor-demo
 
-Demo project for the CI/CD Failure Predictor diploma defense. Three
+Demo project for the CI/CD Failure Predictor diploma defence. Three
 pre-staged commits trigger three different predictor decisions:
 
 | Commit                | Diff                                | Expected decision |
