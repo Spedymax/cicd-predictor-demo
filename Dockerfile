@@ -1,3 +1,2 @@
-FROM python:99.99-slim
-WORKDIR /app
-COPY src/ src/
+FROM python:3.12-slim
+TOTALLY_FAKE_CMD do-it
