@@ -10,3 +10,5 @@ pre-staged commits trigger three different predictor decisions:
 | `03-dockerfile-rewrite` | rewrite Dockerfile + restructure | `BLOCK`           |
 
 These are reproducible demo scenarios — not real bugs.
+
+Touch: 1778945373
