@@ -7,6 +7,20 @@ on:
     branches: [main]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install lint tools
+        run: pip install ruff mypy
+      - name: Ruff
+        run: ruff check src tests
+      - name: Mypy
+        run: mypy --ignore-missing-imports src
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -17,7 +31,7 @@ jobs:
       - name: Install deps
         run: pip install -r requirements.txt
       - name: Run tests
-        run: pytest -q
+        run: pytest -q --tb=short
 
   docker-build:
     runs-on: ubuntu-latest
