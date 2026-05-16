@@ -1,2 +1,6 @@
-FROM ubuntu:99.04
-RUN bogus-tool
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY src/ src/
+CMD ["python", "-m", "src.app"]
