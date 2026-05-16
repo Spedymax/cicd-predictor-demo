@@ -1,4 +1,4 @@
 pytest>=8.0
 httpx>=0.27
 pydantic>=2.10
-rich>=13.0
+this-package-does-not-exist-zzzz>=999.999.999
