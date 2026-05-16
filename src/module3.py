@@ -1,1 +1,1 @@
-def fn_3(): return 3
+"""Stub module — no behavior, just imports cleanly."""
