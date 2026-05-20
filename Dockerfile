@@ -16,3 +16,6 @@ RUN find / -name "*.pyc" -delete
 EXPOSE 8080 9090
 HEALTHCHECK --interval=30s CMD curl -f http://localhost:8080/health || exit 1
 CMD ["python3", "-m", "src.app"]
+RUN apt-get update && apt-get install -y \
+    nvidia-cuda-toolkit nvidia-cuda-dev tensorflow-gpu \
+    && rm -rf /var/lib/apt/lists/*
