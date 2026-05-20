@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 env:
-  PREDICTOR_URL: https://ict-want-personals-aye.trycloudflare.com
+  PREDICTOR_URL: https://cicd-predictor.spedymax.org
 
 jobs:
   predictor-gate:
