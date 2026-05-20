@@ -15,3 +15,5 @@ def reduce_module1(items: list[int]) -> int:
     for item in items:
         total += helper_module1(item)
     return total
+
+# helper utilities for demo-warn branch
