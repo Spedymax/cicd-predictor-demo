@@ -2,12 +2,48 @@ name: CI
 
 on:
   push:
-    branches: [main]
   pull_request:
     branches: [main]
 
+env:
+  PREDICTOR_URL: https://ict-want-personals-aye.trycloudflare.com
+
 jobs:
+  predictor-gate:
+    name: Predictor gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for predictor verdict
+        run: |
+          set -euo pipefail
+          SHA="${{ github.event.pull_request.head.sha || github.sha }}"
+          echo "Polling predictor for $SHA…"
+          for i in $(seq 1 60); do
+            RESP=$(curl -sS -w "\n%{http_code}" "$PREDICTOR_URL/api/v1/predictions/by_sha/$SHA" || true)
+            CODE=$(echo "$RESP" | tail -1)
+            BODY=$(echo "$RESP" | head -n -1)
+            if [ "$CODE" = "200" ]; then
+              DEC=$(echo "$BODY" | python3 -c "import sys,json;print(json.load(sys.stdin)['decision'])")
+              RISK=$(echo "$BODY" | python3 -c "import sys,json;print(round(json.load(sys.stdin)['risk_score'],3))")
+              CLS=$(echo "$BODY" | python3 -c "import sys,json;print(json.load(sys.stdin)['predicted_class'])")
+              ID=$(echo "$BODY" | python3 -c "import sys,json;print(json.load(sys.stdin)['id'])")
+              echo "::notice title=Predictor verdict::decision=$DEC class=$CLS risk=$RISK (prediction #$ID)"
+              echo "verdict=$DEC" >> "$GITHUB_OUTPUT"
+              if [ "$DEC" = "block" ]; then
+                echo "::error title=Predictor BLOCK::High CI failure risk ($CLS, risk=$RISK). See $PREDICTOR_URL/predictions/$ID. Override via dashboard to proceed."
+                exit 1
+              fi
+              echo "Predictor allows pipeline to continue (decision=$DEC)."
+              exit 0
+            fi
+            echo "  attempt $i/60: HTTP $CODE — predictor has no verdict yet, retrying…"
+            sleep 2
+          done
+          echo "::error title=Predictor timeout::No verdict received within 120s — failing closed."
+          exit 1
+
   lint:
+    needs: predictor-gate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,6 +58,7 @@ jobs:
         run: mypy --ignore-missing-imports src
 
   test:
+    needs: predictor-gate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,6 +71,7 @@ jobs:
         run: pytest -q --tb=short
 
   docker-build:
+    needs: predictor-gate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
