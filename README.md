@@ -24,3 +24,8 @@ minor update
 minor update
 
 <!-- minor doc tweak -->
+
+## Internal modules
+
+The GPU training stack adds batch processing (`src/pipeline.py`), a TTL cache
+(`src/cache.py`) and a cooperative scheduler (`src/scheduler.py`).
