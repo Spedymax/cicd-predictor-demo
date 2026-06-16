@@ -24,3 +24,5 @@ minor update
 minor update
 
 <!-- minor doc tweak -->
+
+See the deployment guide for webhook setup details.
