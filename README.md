@@ -24,3 +24,8 @@ minor update
 minor update
 
 <!-- minor doc tweak -->
+
+## Metrics
+
+The service exposes lightweight in-memory counters and timers via
+`src/metrics.py` (see `MetricsRegistry`). No external dependencies are required.
